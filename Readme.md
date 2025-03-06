@@ -32,7 +32,10 @@ Integrate the ability to browse the web and interact with external resources sea
 2. Advanced Reasoning Models
 Connect to specialized reasoning models such as deepseek-r1 for more complex inference tasks.
 
-3. RL-Tuning Model Paradigm
+3. Test on Agent Benchmarks
+Evaluate our framework on agentic benchmark such as Webshop, GAIA, OSWorld, AgentBench
+
+4. RL-Tuning Model Paradigm
 Provide an RL fine-tuning approach for customizing the agent’s behavior in various real-world applications.
 
 # Acknowledgement
