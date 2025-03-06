@@ -42,7 +42,7 @@ We welcome all developers who are interested in this project can reach out to (k
 Stay tuned for updates and the official release of our repository. Together, let's build a thriving open-source agent ecosystem!
 
 ## Citation
-Please cite the following paper if you find Marble helpful!
+Please cite the following paper if you find OpenManus helpful!
 ```bibtex
 @misc{OpenManus,
   author       = {Kunlun Zhu, Haofei Yu, Jiaxuan You},
