@@ -1,8 +1,16 @@
-# OpenManus (ulab-uiuc)
+# OpenManus
 
 OpenManus is an open-source initiative that aims to build a robust agent ecosystem capable of harnessing various powerful tools—such as the MCP tool base and web browsing—to achieve sophisticated reasoning and execution. We draw inspiration from existing works like **OSWorld**, **open-interpretor**, and more. **Code coming soon**!
 
 ---
+
+<div style="display: flex; justify-content: center;">
+  <div style="width: 100; transform: scale(1.0);">
+    <img src="assets/manus.jpg" style="width: 100%;" alt="marble">
+  </div>
+</div>
+
+
 
 ## Team Members
 - **@Kunlun Zhu**
@@ -29,5 +37,6 @@ Provide an RL fine-tuning approach for customizing the agent’s behavior in var
 
 # Acknowledgement
 We extend our thanks to ulab-uiuc (https://ulab-uiuc.github.io/) for their support and shared knowledge. Their mission and community contributions help drive innovations like OpenManus forward.
+We welcome all developers who are interested in this project can reach out to (kunlunz2@illinois.edu)
 
 Stay tuned for updates and the official release of our repository. Together, let's build a thriving open-source agent ecosystem!
