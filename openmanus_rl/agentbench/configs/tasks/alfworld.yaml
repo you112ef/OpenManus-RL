@@ -7,7 +7,7 @@ default:
     name: alfworld-std
     data_path: "/AgentBench/data/alfworld"
     config_path: "src/server/tasks/alfworld/configs/base_config.yaml"
-    prompts_path: "src/server/tasks/alfworld/prompts/alfworld_multiturn_plan_first.json"
+    prompts_path: "src/server/tasks/alfworld/prompts/alfworld_multiturn_long_thought.json"
     split: "standard"
     max_step: 35
 
