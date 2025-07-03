@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOUSEF SH - المساعد الذكي</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                            <path d="M19 15L19.75 18.5L23 19L19.75 19.5L19 23L18.25 19.5L15 19L18.25 18.5L19 15Z" fill="currentColor"/>
+                            <path d="M5 6L5.5 8L8 8.5L5.5 9L5 11L4.5 9L2 8.5L4.5 8L5 6Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>YOUSEF SH</h1>
+                        <span class="tagline">المساعد الذكي</span>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="status-indicator" id="statusIndicator">
+                        <div class="status-dot online"></div>
+                        <span id="statusText">متصل</span>
+                    </div>
+                    <button class="control-btn" id="settingsBtn" title="الإعدادات">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            <path d="m12 1 1.68 2.32L16 2.24l.66 2.68L19.36 4l.66 2.68L22 8l-1.08 2.32L22 12.68 20.02 14l1.08 2.32L19.36 18l-2.7-.92L16 19.76l-2.32-1.08L12 20l-1.68-1.24L8 19.76l-.66-2.68L4.64 18l-.66-2.68L2 14l1.08-2.32L2 9.32 3.98 8l-1.08-2.32L4.64 4l2.7.92L8 2.24l2.32 1.08L12 1z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                    <button class="control-btn" id="newChatBtn" title="محادثة جديدة">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="chat-container" id="chatContainer">
+                <!-- Welcome Message -->
+                <div class="welcome-section" id="welcomeSection">
+                    <div class="welcome-avatar">
+                        <div class="avatar-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                                <path d="M19 15L19.75 18.5L23 19L19.75 19.5L19 23L18.25 19.5L15 19L18.25 18.5L19 15Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2>مرحباً بك في YOUSEF SH</h2>
+                    <p>أنا مساعدك الذكي، جاهز لمساعدتك في أي شيء تحتاجه. يمكنني العمل معك سواء كنت متصلاً بالإنترنت أم لا.</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">💬</div>
+                            <h3>محادثة ذكية</h3>
+                            <p>أجيب على أسئلتك وأساعدك في حل مشاكلك</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🌐</div>
+                            <h3>يعمل بدون إنترنت</h3>
+                            <p>أعمل محلياً حتى بدون اتصال بالإنترنت</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔒</div>
+                            <h3>آمن وموثوق</h3>
+                            <p>محادثاتك محمية ولا تغادر جهازك</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>سريع الاستجابة</h3>
+                            <p>أجيب بسرعة ودقة على جميع استفساراتك</p>
+                        </div>
+                    </div>
+
+                    <div class="suggested-questions">
+                        <p>جرب هذه الأسئلة:</p>
+                        <div class="suggestions">
+                            <button class="suggestion-btn" data-message="مرحباً، كيف حالك؟">مرحباً، كيف حالك؟</button>
+                            <button class="suggestion-btn" data-message="من أنت؟">من أنت؟</button>
+                            <button class="suggestion-btn" data-message="كيف يمكنك مساعدتي؟">كيف يمكنك مساعدتي؟</button>
+                            <button class="suggestion-btn" data-message="ما الوقت الآن؟">ما الوقت الآن؟</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="messages-container" id="messagesContainer" style="display: none;">
+                    <div class="messages" id="messages"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="اكتب رسالتك هنا..."
+                        rows="1"
+                        maxlength="4000"
+                    ></textarea>
+                    <button id="sendButton" class="send-btn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-info">
+                    <span class="char-count" id="charCount">0/4000</span>
+                    <span class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <span class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                        YOUSEF SH يكتب...
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>الإعدادات</h3>
+                    <button class="close-btn" id="closeSettings">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-item">
+                        <label>حالة الاتصال:</label>
+                        <span id="connectionStatus">جاري التحقق...</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>وضع الذكاء الاصطناعي:</label>
+                        <span id="aiMode">تلقائي</span>
+                    </div>
+                    <div class="setting-item">
+                        <label>عدد الرسائل:</label>
+                        <span id="messageCount">0</span>
+                    </div>
+                    <div class="setting-item">
+                        <button class="clear-btn" id="clearHistory">مسح تاريخ المحادثة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https: wss: ws:; media-src 'self' https: data:;">
+    
+    <title>YOUSEF SH - المساعد الذكي</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Root Variables */
+        :root {
+          --primary-color: #6366f1;
+          --primary-hover: #5855eb;
+          --secondary-color: #f1f5f9;
+          --background-dark: #0f0f23;
+          --background-card: #1a1a2e;
+          --background-light: #16213e;
+          --text-primary: #ffffff;
+          --text-secondary: #94a3b8;
+          --text-muted: #64748b;
+          --border-color: #334155;
+          --success-color: #10b981;
+          --warning-color: #f59e0b;
+          --error-color: #ef4444;
+          --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+          --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+          --shadow-large: 0 20px 25px rgba(0, 0, 0, 0.15);
+          --border-radius: 12px;
+          --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Reset and Base Styles */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: var(--background-dark);
+          color: var(--text-primary);
+          line-height: 1.6;
+          overflow-x: hidden;
+          direction: rtl;
+          text-align: right;
+          -webkit-touch-callout: none;
+          -webkit-text-size-adjust: none;
+          -webkit-user-select: none;
+          -webkit-tap-highlight-color: rgba(0,0,0,0);
+          overscroll-behavior: none;
+        }
+        
+        /* App Container */
+        .app-container {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          background: linear-gradient(135deg, var(--background-dark) 0%, #1a1a2e 100%);
+        }
+        
+        /* Header Styles */
+        .header {
+          background: rgba(26, 26, 46, 0.9);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--border-color);
+          padding: 1rem;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          padding-top: env(safe-area-inset-top, 1rem);
+        }
+        
+        .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          max-width: 100%;
+        }
+        
+        .logo-section {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        
+        .logo-icon {
+          width: 36px;
+          height: 36px;
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          box-shadow: var(--shadow-medium);
+        }
+        
+        .logo-icon svg {
+          width: 20px;
+          height: 20px;
+        }
+        
+        .logo-text h1 {
+          font-size: 1.25rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .logo-text .tagline {
+          font-size: 0.75rem;
+          color: var(--text-secondary);
+          font-weight: 400;
+        }
+        
+        .header-controls {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        
+        .status-indicator {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.5rem 0.75rem;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 16px;
+          border: 1px solid var(--border-color);
+          font-size: 0.75rem;
+        }
+        
+        .status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--success-color);
+        }
+        
+        .control-btn {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 0.5rem;
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 44px;
+          min-width: 44px;
+        }
+        
+        .control-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: var(--primary-color);
+          transform: translateY(-1px);
+        }
+        
+        .control-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+        
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 1rem;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          overflow-scrolling: touch;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 2rem 1rem;
+          max-width: 100%;
+        }
+        
+        .welcome-avatar {
+          margin-bottom: 1.5rem;
+        }
+        
+        .avatar-icon {
+          width: 64px;
+          height: 64px;
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          box-shadow: var(--shadow-large);
+          animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        
+        .avatar-icon svg {
+          width: 32px;
+          height: 32px;
+        }
+        
+        .welcome-section h2 {
+          font-size: 1.75rem;
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+          background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .welcome-section > p {
+          font-size: 1rem;
+          color: var(--text-secondary);
+          margin-bottom: 2rem;
+          line-height: 1.6;
+        }
+        
+        /* Suggestions */
+        .suggested-questions {
+          width: 100%;
+          margin-top: 2rem;
+        }
+        
+        .suggested-questions p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+        
+        .suggestions {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        
+        .suggestion-btn {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 1rem;
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: var(--transition);
+          font-size: 0.9rem;
+          text-align: center;
+          min-height: 44px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .suggestion-btn:hover {
+          background: var(--primary-color);
+          border-color: var(--primary-color);
+          transform: translateY(-2px);
+        }
+        
+        /* Messages */
+        .messages-container {
+          flex: 1;
+          padding: 1rem 0;
+          display: none;
+        }
+        
+        .messages {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          max-width: 100%;
+        }
+        
+        .message {
+          display: flex;
+          gap: 0.75rem;
+          animation: slideInMobile 0.2s ease-out;
+        }
+        
+        @keyframes slideInMobile {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        .message.user {
+          flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        
+        .message.user .message-avatar {
+          background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .message.assistant .message-avatar {
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+        }
+        
+        .message-avatar svg {
+          width: 16px;
+          height: 16px;
+          color: white;
+        }
+        
+        .message-content {
+          flex: 1;
+          background: var(--background-card);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          padding: 0.75rem 1rem;
+          position: relative;
+          max-width: calc(100% - 48px);
+        }
+        
+        .message.user .message-content {
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          border-color: var(--primary-color);
+          color: white;
+        }
+        
+        .message-text {
+          font-size: 0.9rem;
+          line-height: 1.5;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+        
+        .message-time {
+          font-size: 0.7rem;
+          color: var(--text-muted);
+          margin-top: 0.25rem;
+          text-align: left;
+        }
+        
+        .message.user .message-time {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Input Area */
+        .input-area {
+          background: rgba(26, 26, 46, 0.9);
+          backdrop-filter: blur(20px);
+          border-top: 1px solid var(--border-color);
+          padding: 1rem;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+        }
+        
+        .input-container {
+          max-width: 100%;
+        }
+        
+        .input-wrapper {
+          display: flex;
+          gap: 0.75rem;
+          align-items: flex-end;
+          background: var(--background-card);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          padding: 0.75rem;
+          transition: var(--transition);
+        }
+        
+        .input-wrapper:focus-within {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        #messageInput {
+          flex: 1;
+          background: transparent;
+          border: none;
+          outline: none;
+          color: var(--text-primary);
+          font-size: 16px;
+          resize: none;
+          min-height: 20px;
+          max-height: 80px;
+          font-family: inherit;
+          line-height: 1.4;
+        }
+        
+        #messageInput::placeholder {
+          color: var(--text-muted);
+        }
+        
+        .send-btn {
+          background: var(--primary-color);
+          border: none;
+          border-radius: 8px;
+          padding: 0.75rem;
+          color: white;
+          cursor: pointer;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 44px;
+          height: 44px;
+        }
+        
+        .send-btn:hover:not(:disabled) {
+          background: var(--primary-hover);
+          transform: translateY(-1px);
+        }
+        
+        .send-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        .send-btn svg {
+          width: 18px;
+          height: 18px;
+        }
+        
+        .input-info {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 0.5rem;
+          font-size: 0.7rem;
+          color: var(--text-muted);
+        }
+        
+        /* Typing indicator */
+        .typing-indicator {
+          display: none;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--primary-color);
+          font-size: 0.8rem;
+        }
+        
+        .typing-dots {
+          display: flex;
+          gap: 2px;
+        }
+        
+        .typing-dots span {
+          width: 4px;
+          height: 4px;
+          background: var(--primary-color);
+          border-radius: 50%;
+          animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+          0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.3;
+          }
+          30% {
+            transform: translateY(-8px);
+            opacity: 1;
+          }
+        }
+        
+        /* Hide scrollbars */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        
+        /* Bottom padding for input area */
+        .main-content {
+          padding-bottom: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                            <path d="M19 15L19.75 18.5L23 19L19.75 19.5L19 23L18.25 19.5L15 19L18.25 18.5L19 15Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>YOUSEF SH</h1>
+                        <span class="tagline">المساعد الذكي</span>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <div class="status-indicator" id="statusIndicator">
+                        <div class="status-dot"></div>
+                        <span id="statusText">محلي</span>
+                    </div>
+                    <button class="control-btn" id="newChatBtn" title="محادثة جديدة">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="chat-container" id="chatContainer">
+                <!-- Welcome Message -->
+                <div class="welcome-section" id="welcomeSection">
+                    <div class="welcome-avatar">
+                        <div class="avatar-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                                <path d="M19 15L19.75 18.5L23 19L19.75 19.5L19 23L18.25 19.5L15 19L18.25 18.5L19 15Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2>مرحباً بك في YOUSEF SH</h2>
+                    <p>أنا مساعدك الذكي، جاهز لمساعدتك في أي شيء تحتاجه. أعمل محلياً على جهازك بدون الحاجة للإنترنت.</p>
+                    
+                    <div class="suggested-questions">
+                        <p>جرب هذه الأسئلة:</p>
+                        <div class="suggestions">
+                            <button class="suggestion-btn" data-message="مرحباً، كيف حالك؟">مرحباً، كيف حالك؟</button>
+                            <button class="suggestion-btn" data-message="من أنت؟">من أنت؟</button>
+                            <button class="suggestion-btn" data-message="كيف يمكنك مساعدتي؟">كيف يمكنك مساعدتي؟</button>
+                            <button class="suggestion-btn" data-message="ما الوقت الآن؟">ما الوقت الآن؟</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="messages-container" id="messagesContainer">
+                    <div class="messages" id="messages"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="اكتب رسالتك هنا..."
+                        rows="1"
+                        maxlength="2000"
+                    ></textarea>
+                    <button id="sendButton" class="send-btn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-info">
+                    <span class="char-count" id="charCount">0/2000</span>
+                    <span class="typing-indicator" id="typingIndicator">
+                        <span class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                        YOUSEF SH يكتب...
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        // Local AI Agent Class
+        class YousefSHMobileAgent {
+          constructor() {
+            this.messageCount = 0;
+            this.isTyping = false;
+            this.conversationHistory = [];
+            
+            this.initializeElements();
+            this.setupEventListeners();
+            this.initializeCordova();
+          }
+
+          initializeElements() {
+            this.messageInput = document.getElementById('messageInput');
+            this.sendButton = document.getElementById('sendButton');
+            this.messagesContainer = document.getElementById('messages');
+            this.welcomeSection = document.getElementById('welcomeSection');
+            this.messagesSection = document.getElementById('messagesContainer');
+            this.charCount = document.getElementById('charCount');
+            this.typingIndicator = document.getElementById('typingIndicator');
+            this.newChatBtn = document.getElementById('newChatBtn');
+            this.suggestionBtns = document.querySelectorAll('.suggestion-btn');
+          }
+
+          setupEventListeners() {
+            // Input events
+            this.messageInput.addEventListener('input', () => this.handleInput());
+            this.messageInput.addEventListener('keydown', (e) => this.handleKeyDown(e));
+            this.sendButton.addEventListener('click', () => this.sendMessage());
+            
+            // Control buttons
+            this.newChatBtn.addEventListener('click', () => this.startNewChat());
+            
+            // Suggestion buttons
+            this.suggestionBtns.forEach(btn => {
+              btn.addEventListener('click', () => {
+                const message = btn.getAttribute('data-message');
+                this.sendPredefinedMessage(message);
+              });
+            });
+            
+            // Auto-resize textarea
+            this.messageInput.addEventListener('input', () => this.autoResizeTextarea());
+            
+            // Prevent context menu and selection
+            document.addEventListener('contextmenu', (e) => e.preventDefault());
+            document.addEventListener('selectstart', (e) => e.preventDefault());
+          }
+
+          initializeCordova() {
+            if (typeof cordova !== 'undefined') {
+              document.addEventListener('deviceready', () => {
+                console.log('📱 Cordova device ready');
+                
+                // Set Android class
+                if (device && device.platform === 'Android') {
+                  document.body.classList.add('android');
+                }
+                
+                // Handle back button
+                document.addEventListener('backbutton', (e) => this.handleBackButton(e), false);
+                
+                // Handle status bar
+                if (window.StatusBar) {
+                  StatusBar.styleDefault();
+                  StatusBar.backgroundColorByHexString('#0f0f23');
+                }
+              }, false);
+            }
+          }
+
+          handleBackButton(e) {
+            e.preventDefault();
+            
+            // If in chat, go back to welcome
+            if (this.messagesSection.style.display !== 'none') {
+              if (confirm('هل تريد بدء محادثة جديدة؟')) {
+                this.startNewChat();
+              }
+            } else {
+              // Exit app
+              if (confirm('هل تريد إغلاق التطبيق؟')) {
+                if (navigator.app) {
+                  navigator.app.exitApp();
+                }
+              }
+            }
+          }
+
+          handleInput() {
+            const value = this.messageInput.value;
+            const length = value.length;
+            
+            this.charCount.textContent = `${length}/2000`;
+            this.sendButton.disabled = length === 0 || length > 2000 || this.isTyping;
+          }
+
+          handleKeyDown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              if (!this.sendButton.disabled) {
+                this.sendMessage();
+              }
+            }
+          }
+
+          autoResizeTextarea() {
+            this.messageInput.style.height = 'auto';
+            this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 80) + 'px';
+          }
+
+          async sendMessage() {
+            const message = this.messageInput.value.trim();
+            if (!message || this.isTyping) return;
+
+            // Show chat interface if first message
+            if (this.messageCount === 0) {
+              this.showChatInterface();
+            }
+
+            // Add user message
+            this.addMessage('user', message);
+            
+            // Clear input
+            this.messageInput.value = '';
+            this.handleInput();
+            this.autoResizeTextarea();
+            
+            // Set typing state
+            this.isTyping = true;
+            this.showTypingIndicator(true);
+            this.sendButton.disabled = true;
+            
+            // Generate AI response
+            setTimeout(() => {
+              const response = this.generateLocalResponse(message);
+              this.addMessage('assistant', response);
+              this.isTyping = false;
+              this.showTypingIndicator(false);
+              this.sendButton.disabled = this.messageInput.value.trim().length === 0;
+            }, 1000 + Math.random() * 1500); // Simulate thinking time
+            
+            this.messageCount++;
+          }
+
+          sendPredefinedMessage(message) {
+            this.messageInput.value = message;
+            this.handleInput();
+            this.sendMessage();
+          }
+
+          generateLocalResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Arabic greetings
+            if (lowerMessage.includes('مرحبا') || lowerMessage.includes('أهلا') || lowerMessage.includes('السلام')) {
+              return "مرحبًا بك! أنا يوسف شاهين، مساعدك الذكي. سعيد بلقائك! كيف يمكنني مساعدتك اليوم؟";
+            }
+            
+            // Status questions
+            if (lowerMessage.includes('كيف حالك') || lowerMessage.includes('أخبارك')) {
+              return "أشكرك على السؤال! أعمل بشكل ممتاز وجاهز لمساعدتك في أي وقت. التطبيق يعمل محلياً على جهازك بدون الحاجة للإنترنت. ما الذي تحتاج إليه؟";
+            }
+            
+            // Identity questions
+            if (lowerMessage.includes('من أنت') || lowerMessage.includes('اسمك') || lowerMessage.includes('تعريف')) {
+              return "أنا يوسف شاهين (YOUSEF SH)، مساعد ذكي مطور خصيصاً لمساعدتك في مختلف المهام والاستفسارات. أعمل محلياً على جهازك، مما يعني أن محادثاتك آمنة ومحمية. يمكنني مساعدتك في الأسئلة العامة والمحادثة والكثير غير ذلك!";
+            }
+            
+            // Help requests
+            if (lowerMessage.includes('مساعدة') || lowerMessage.includes('help') || lowerMessage.includes('تساعدني')) {
+              return "بالطبع! يسعدني مساعدتك. يمكنني أن أقدم لك:\n\n• الإجابة على الأسئلة العامة\n• المساعدة في المحادثة والدردشة\n• تقديم المعلومات والنصائح\n• المساعدة في حل المشاكل البسيطة\n• دعم كامل للغة العربية\n\nما الموضوع الذي تحتاج مساعدة فيه تحديداً؟";
+            }
+            
+            // Time and date
+            if (lowerMessage.includes('وقت') || lowerMessage.includes('تاريخ') || lowerMessage.includes('الآن')) {
+              const now = new Date();
+              const arabicDate = now.toLocaleDateString('ar-EG', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+              const arabicTime = now.toLocaleTimeString('ar-EG', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+              });
+              return `📅 التاريخ: ${arabicDate}\n🕐 الوقت: ${arabicTime}\n\nهذا هو التوقيت المحلي على جهازك.`;
+            }
+            
+            // Technology questions
+            if (lowerMessage.includes('كيف تعمل') || lowerMessage.includes('تقنية') || lowerMessage.includes('technology')) {
+              return "أعمل كتطبيق محلي على جهازك باستخدام تقنيات الويب المتقدمة. لا أحتاج للإنترنت للعمل، وهذا يعني:\n\n✅ سرعة في الاستجابة\n✅ حماية كاملة لخصوصيتك\n✅ يعمل في أي مكان وأي وقت\n✅ لا يستهلك بيانات الإنترنت\n\nتم تطويري باستخدام HTML5, CSS3, وJavaScript مع إطار عمل Cordova للأندرويد.";
+            }
+            
+            // Compliments
+            if (lowerMessage.includes('ممتاز') || lowerMessage.includes('رائع') || lowerMessage.includes('شكر')) {
+              return "شكراً لك على كلماتك الطيبة! 😊 يسعدني أن أكون مفيداً لك. هدفي هو تقديم أفضل مساعدة ممكنة باللغة العربية. هل هناك شيء آخر يمكنني مساعدتك فيه؟";
+            }
+            
+            // Weather (simulated)
+            if (lowerMessage.includes('طقس') || lowerMessage.includes('جو') || lowerMessage.includes('weather')) {
+              return "عذراً، لا يمكنني الوصول لبيانات الطقس الحقيقية لأنني أعمل محلياً بدون إنترنت. لكن يمكنك:\n\n🌤️ فتح تطبيق الطقس على جهازك\n🌐 البحث في Google عن \"الطقس اليوم\"\n📱 استخدام تطبيقات الطقس المتخصصة\n\nهل يمكنني مساعدتك في شيء آخر؟";
+            }
+            
+            // Math questions
+            if (lowerMessage.includes('حساب') || lowerMessage.includes('رياضة') || lowerMessage.includes('+') || lowerMessage.includes('-') || lowerMessage.includes('×') || lowerMessage.includes('÷')) {
+              return "يمكنني مساعدتك في العمليات الحسابية البسيطة! اكتب العملية التي تريد حلها وسأساعدك.\n\nمثال:\n• 25 + 17 = ؟\n• 100 ÷ 4 = ؟\n• 8 × 7 = ؟\n\nما هي العملية الحسابية التي تريد حلها؟";
+            }
+            
+            // Fun responses
+            if (lowerMessage.includes('نكتة') || lowerMessage.includes('مزحة') || lowerMessage.includes('joke')) {
+              const jokes = [
+                "لماذا لا يستطيع الذكاء الاصطناعي النوم؟ 😴\nلأنه دائماً في وضع 'التشغيل'! 🤖",
+                "ما الفرق بين الإنسان والذكاء الاصطناعي؟ 🤔\nالإنسان يحتاج قهوة ليفكر، أما أنا فأحتاج كهرباء! ⚡☕",
+                "لماذا أحب العمل محلياً؟ 🏠\nلأنني لا أحتاج لـ WiFi لأكون ذكياً! 📶😄"
+              ];
+              return jokes[Math.floor(Math.random() * jokes.length)];
+            }
+            
+            // Default responses with context
+            const responses = [
+              `شكراً لك على سؤالك: "${message}"\n\nأعمل حالياً في الوضع المحلي، لذا قدراتي محدودة مقارنة بالمساعدين المتصلين بالإنترنت. لكن يمكنني مساعدتك في:\n\n• المحادثة العامة\n• الأسئلة البسيطة\n• المعلومات الأساسية\n• الحسابات البسيطة\n\nهل يمكنك إعادة صياغة سؤالك بطريقة أخرى؟`,
+              
+              `أقدر اهتمامك بسؤال: "${message}"\n\nكوني أعمل محلياً، قد لا أملك إجابة شاملة لهذا السؤال تحديداً. لكن يمكنني:\n\n✅ مساعدتك في صياغة السؤال بطريقة أوضح\n✅ اقتراح مصادر للبحث عن الإجابة\n✅ الدردشة حول مواضيع عامة\n\nما رأيك أن نجرب موضوعاً آخر؟`,
+              
+              `سؤال مثير للاهتمام: "${message}"\n\nأحاول دائماً أن أكون مفيداً، لكن كوني أعمل بدون إنترنت، فإن معرفتي محدودة. يمكنني مساعدتك أكثر في:\n\n💬 المحادثة والدردشة\n🤔 الأسئلة الشخصية\n📚 المعلومات العامة البسيطة\n⏰ الوقت والتاريخ\n\nهل تريد التحدث عن موضوع آخر؟`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+          }
+
+          addMessage(sender, content) {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${sender}`;
+            
+            const avatarEl = document.createElement('div');
+            avatarEl.className = 'message-avatar';
+            
+            if (sender === 'user') {
+              avatarEl.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              `;
+            } else {
+              avatarEl.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+                  <path d="M19 15L19.75 18.5L23 19L19.75 19.5L19 23L18.25 19.5L15 19L18.25 18.5L19 15Z" fill="currentColor"/>
+                </svg>
+              `;
+            }
+            
+            const contentEl = document.createElement('div');
+            contentEl.className = 'message-content';
+            
+            const textEl = document.createElement('div');
+            textEl.className = 'message-text';
+            textEl.textContent = content;
+            
+            const timeEl = document.createElement('div');
+            timeEl.className = 'message-time';
+            timeEl.textContent = new Date().toLocaleTimeString('ar-EG', {
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            
+            contentEl.appendChild(textEl);
+            contentEl.appendChild(timeEl);
+            messageEl.appendChild(avatarEl);
+            messageEl.appendChild(contentEl);
+            
+            this.messagesContainer.appendChild(messageEl);
+            this.scrollToBottom();
+            
+            // Store in conversation history
+            this.conversationHistory.push({ sender, content, time: new Date() });
+          }
+
+          showTypingIndicator(show) {
+            this.typingIndicator.style.display = show ? 'flex' : 'none';
+          }
+
+          showChatInterface() {
+            this.welcomeSection.style.display = 'none';
+            this.messagesSection.style.display = 'block';
+          }
+
+          scrollToBottom() {
+            setTimeout(() => {
+              this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+            }, 100);
+          }
+
+          startNewChat() {
+            this.messageCount = 0;
+            this.conversationHistory = [];
+            this.messagesContainer.innerHTML = '';
+            this.welcomeSection.style.display = 'block';
+            this.messagesSection.style.display = 'none';
+            this.messageInput.value = '';
+            this.handleInput();
+            this.isTyping = false;
+            this.showTypingIndicator(false);
+          }
+        }
+
+        // Initialize the app
+        function initializeApp() {
+          window.app = new YousefSHMobileAgent();
+          
+          // Add loading animation
+          const loadingElements = document.querySelectorAll('.suggestion-btn');
+          loadingElements.forEach((element, index) => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+              element.style.transition = 'all 0.4s ease';
+              element.style.opacity = '1';
+              element.style.transform = 'translateY(0)';
+            }, 100 + (index * 100));
+          });
+          
+          console.log('🚀 YOUSEF SH Mobile Agent initialized');
+        }
+
+        // Initialize based on environment
+        if (typeof cordova !== 'undefined') {
+          // Mobile app - wait for device ready
+          console.log('📱 Running as mobile app');
+          document.addEventListener('deviceready', initializeApp, false);
+        } else {
+          // Web app - use DOM ready
+          document.addEventListener('DOMContentLoaded', initializeApp);
+        }
+    </script>
+</body>
+</html>
