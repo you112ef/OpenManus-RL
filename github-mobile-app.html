@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    
+    <title>YOUSEF SH - المساعد الذكي</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Root Variables */
+        :root {
+          --primary-color: #6366f1;
+          --primary-hover: #5855eb;
+          --background-dark: #0f0f23;
+          --background-card: #1a1a2e;
+          --text-primary: #ffffff;
+          --text-secondary: #94a3b8;
+          --text-muted: #64748b;
+          --border-color: #334155;
+          --success-color: #10b981;
+          --border-radius: 12px;
+          --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Reset and Base Styles */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: linear-gradient(135deg, var(--background-dark) 0%, #1a1a2e 100%);
+          color: var(--text-primary);
+          line-height: 1.6;
+          overflow-x: hidden;
+          direction: rtl;
+          text-align: right;
+          -webkit-touch-callout: none;
+          -webkit-text-size-adjust: none;
+          -webkit-user-select: none;
+          -webkit-tap-highlight-color: rgba(0,0,0,0);
+          overscroll-behavior: none;
+          min-height: 100vh;
+        }
+        
+        /* App Container */
+        .app-container {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+          background: rgba(26, 26, 46, 0.9);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid var(--border-color);
+          padding: 1rem;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          padding-top: env(safe-area-inset-top, 1rem);
+        }
+        
+        .header-content {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .logo-section {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        
+        .logo-icon {
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 1.5rem;
+        }
+        
+        .logo-text h1 {
+          font-size: 1.3rem;
+          font-weight: 700;
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .logo-text .tagline {
+          font-size: 0.8rem;
+          color: var(--text-secondary);
+          font-weight: 400;
+        }
+        
+        .status-indicator {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.5rem 0.75rem;
+          background: rgba(16, 185, 129, 0.1);
+          border-radius: 16px;
+          border: 1px solid var(--success-color);
+          font-size: 0.75rem;
+          color: var(--success-color);
+        }
+        
+        .status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--success-color);
+          animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        
+        /* Main Content */
+        .main-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 1rem;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          padding-bottom: 120px;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 2rem 1rem;
+        }
+        
+        .avatar-icon {
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 2.5rem;
+          margin-bottom: 1.5rem;
+          animation: float 6s ease-in-out infinite;
+          box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        
+        .welcome-section h2 {
+          font-size: 1.8rem;
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+          background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .welcome-section > p {
+          font-size: 1rem;
+          color: var(--text-secondary);
+          margin-bottom: 2rem;
+          line-height: 1.6;
+        }
+        
+        /* Suggestions */
+        .suggested-questions {
+          width: 100%;
+          margin-top: 2rem;
+        }
+        
+        .suggested-questions p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+        
+        .suggestions {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        
+        .suggestion-btn {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 1rem;
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: var(--transition);
+          font-size: 0.9rem;
+          text-align: center;
+          min-height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: inherit;
+        }
+        
+        .suggestion-btn:hover, .suggestion-btn:active {
+          background: var(--primary-color);
+          border-color: var(--primary-color);
+          transform: translateY(-2px);
+        }
+        
+        /* Messages */
+        .messages-container {
+          flex: 1;
+          padding: 1rem 0;
+          display: none;
+        }
+        
+        .messages {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .message {
+          display: flex;
+          gap: 0.75rem;
+          animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        .message.user {
+          flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+          width: 35px;
+          height: 35px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          font-size: 1.2rem;
+        }
+        
+        .message.user .message-avatar {
+          background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .message.assistant .message-avatar {
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+        }
+        
+        .message-content {
+          flex: 1;
+          background: var(--background-card);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          padding: 0.75rem 1rem;
+          max-width: calc(100% - 50px);
+        }
+        
+        .message.user .message-content {
+          background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+          border-color: var(--primary-color);
+          color: white;
+        }
+        
+        .message-text {
+          font-size: 0.9rem;
+          line-height: 1.5;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+        
+        .message-time {
+          font-size: 0.7rem;
+          color: var(--text-muted);
+          margin-top: 0.25rem;
+          text-align: left;
+        }
+        
+        .message.user .message-time {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Input Area */
+        .input-area {
+          background: rgba(26, 26, 46, 0.95);
+          backdrop-filter: blur(20px);
+          border-top: 1px solid var(--border-color);
+          padding: 1rem;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+        }
+        
+        .input-wrapper {
+          display: flex;
+          gap: 0.75rem;
+          align-items: flex-end;
+          background: var(--background-card);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius);
+          padding: 0.75rem;
+          transition: var(--transition);
+        }
+        
+        .input-wrapper:focus-within {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        #messageInput {
+          flex: 1;
+          background: transparent;
+          border: none;
+          outline: none;
+          color: var(--text-primary);
+          font-size: 16px;
+          resize: none;
+          min-height: 20px;
+          max-height: 80px;
+          font-family: inherit;
+          line-height: 1.4;
+        }
+        
+        #messageInput::placeholder {
+          color: var(--text-muted);
+        }
+        
+        .send-btn {
+          background: var(--primary-color);
+          border: none;
+          border-radius: 8px;
+          padding: 0.75rem;
+          color: white;
+          cursor: pointer;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 44px;
+          height: 44px;
+          font-size: 1.2rem;
+        }
+        
+        .send-btn:hover:not(:disabled) {
+          background: var(--primary-hover);
+          transform: translateY(-1px);
+        }
+        
+        .send-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        /* New Chat Button */
+        .new-chat-btn {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid var(--border-color);
+          border-radius: 8px;
+          padding: 0.5rem;
+          color: var(--text-primary);
+          cursor: pointer;
+          transition: var(--transition);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 40px;
+          min-width: 40px;
+          font-size: 1.1rem;
+        }
+        
+        .new-chat-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: var(--primary-color);
+          transform: translateY(-1px);
+        }
+        
+        /* Typing indicator */
+        .typing-indicator {
+          display: none;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--primary-color);
+          font-size: 0.8rem;
+          margin-top: 0.5rem;
+        }
+        
+        .typing-dots {
+          display: flex;
+          gap: 2px;
+        }
+        
+        .typing-dots span {
+          width: 4px;
+          height: 4px;
+          background: var(--primary-color);
+          border-radius: 50%;
+          animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dots span:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        
+        .typing-dots span:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+          0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.3;
+          }
+          30% {
+            transform: translateY(-8px);
+            opacity: 1;
+          }
+        }
+        
+        /* Hide scrollbars */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 480px) {
+          .header {
+            padding: 0.75rem;
+          }
+          
+          .logo-text h1 {
+            font-size: 1.1rem;
+          }
+          
+          .logo-text .tagline {
+            font-size: 0.7rem;
+          }
+          
+          .avatar-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+          }
+          
+          .welcome-section h2 {
+            font-size: 1.5rem;
+          }
+          
+          .welcome-section > p {
+            font-size: 0.9rem;
+          }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">🤖</div>
+                    <div class="logo-text">
+                        <h1>YOUSEF SH</h1>
+                        <span class="tagline">المساعد الذكي</span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>GitHub</span>
+                    </div>
+                    <button class="new-chat-btn" id="newChatBtn" title="محادثة جديدة">➕</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Message -->
+            <div class="welcome-section" id="welcomeSection">
+                <div class="avatar-icon">🤖</div>
+                <h2>مرحباً بك في YOUSEF SH</h2>
+                <p>أنا مساعدك الذكي، جاهز لمساعدتك في أي شيء تحتاجه. أعمل مباشرة من GitHub بدون الحاجة لخادم خارجي!</p>
+                
+                <div class="suggested-questions">
+                    <p>جرب هذه الأسئلة:</p>
+                    <div class="suggestions">
+                        <button class="suggestion-btn" data-message="مرحباً، كيف حالك؟">مرحباً، كيف حالك؟</button>
+                        <button class="suggestion-btn" data-message="من أنت؟">من أنت؟</button>
+                        <button class="suggestion-btn" data-message="كيف يمكنك مساعدتي؟">كيف يمكنك مساعدتي؟</button>
+                        <button class="suggestion-btn" data-message="ما الوقت الآن؟">ما الوقت الآن؟</button>
+                        <button class="suggestion-btn" data-message="أخبرني نكتة">أخبرني نكتة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="messages" id="messages"></div>
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>YOUSEF SH يكتب...</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea 
+                    id="messageInput" 
+                    placeholder="اكتب رسالتك هنا..."
+                    rows="1"
+                    maxlength="1000"
+                ></textarea>
+                <button id="sendButton" class="send-btn" disabled>🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // YOUSEF SH GitHub Mobile Agent
+        class YousefSHGitHubAgent {
+            constructor() {
+                this.messageCount = 0;
+                this.isTyping = false;
+                this.conversationHistory = [];
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.addWelcomeMessage();
+            }
+
+            initializeElements() {
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.messagesContainer = document.getElementById('messages');
+                this.welcomeSection = document.getElementById('welcomeSection');
+                this.messagesSection = document.getElementById('messagesContainer');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.newChatBtn = document.getElementById('newChatBtn');
+                this.suggestionBtns = document.querySelectorAll('.suggestion-btn');
+            }
+
+            setupEventListeners() {
+                // Input events
+                this.messageInput.addEventListener('input', () => this.handleInput());
+                this.messageInput.addEventListener('keydown', (e) => this.handleKeyDown(e));
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                
+                // Control buttons
+                this.newChatBtn.addEventListener('click', () => this.startNewChat());
+                
+                // Suggestion buttons
+                this.suggestionBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const message = btn.getAttribute('data-message');
+                        this.sendPredefinedMessage(message);
+                    });
+                });
+                
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', () => this.autoResizeTextarea());
+                
+                // Prevent context menu
+                document.addEventListener('contextmenu', (e) => e.preventDefault());
+            }
+
+            addWelcomeMessage() {
+                // Add a welcome message to show the AI is ready
+                setTimeout(() => {
+                    this.addMessage('assistant', 'مرحباً! أنا YOUSEF SH، مساعدك الذكي. أعمل مباشرة من GitHub! 🎉\n\nيمكنني مساعدتك في:\n• الإجابة على الأسئلة العامة\n• المحادثة والدردشة\n• تقديم المعلومات\n• الحسابات البسيطة\n\nما الذي تريد أن تسألني عنه؟');
+                }, 1000);
+            }
+
+            handleInput() {
+                const value = this.messageInput.value;
+                const length = value.length;
+                
+                this.sendButton.disabled = length === 0 || length > 1000 || this.isTyping;
+            }
+
+            handleKeyDown(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (!this.sendButton.disabled) {
+                        this.sendMessage();
+                    }
+                }
+            }
+
+            autoResizeTextarea() {
+                this.messageInput.style.height = 'auto';
+                this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 80) + 'px';
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || this.isTyping) return;
+
+                // Show chat interface if first message
+                if (this.messageCount === 0) {
+                    this.showChatInterface();
+                }
+
+                // Add user message
+                this.addMessage('user', message);
+                
+                // Clear input
+                this.messageInput.value = '';
+                this.handleInput();
+                this.autoResizeTextarea();
+                
+                // Set typing state
+                this.isTyping = true;
+                this.showTypingIndicator(true);
+                this.sendButton.disabled = true;
+                
+                // Generate AI response
+                setTimeout(() => {
+                    const response = this.generateLocalResponse(message);
+                    this.addMessage('assistant', response);
+                    this.isTyping = false;
+                    this.showTypingIndicator(false);
+                    this.sendButton.disabled = this.messageInput.value.trim().length === 0;
+                }, 800 + Math.random() * 1200);
+                
+                this.messageCount++;
+            }
+
+            sendPredefinedMessage(message) {
+                this.messageInput.value = message;
+                this.handleInput();
+                this.sendMessage();
+            }
+
+            generateLocalResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                // GitHub specific responses
+                if (lowerMessage.includes('github') || lowerMessage.includes('جيت هاب')) {
+                    return "نعم! أعمل مباشرة من GitHub Pages! 🐙\n\nهذا يعني:\n✅ لا أحتاج لخادم خارجي\n✅ سريع ومجاني\n✅ يعمل على أي جهاز\n✅ محفوظ في السحاب\n\nGitHub رائع للاستضافة المجانية!";
+                }
+                
+                // Arabic greetings
+                if (lowerMessage.includes('مرحبا') || lowerMessage.includes('أهلا') || lowerMessage.includes('السلام')) {
+                    return "أهلاً وسهلاً بك! 🌟\n\nأنا YOUSEF SH، مساعدك الذكي المستضاف على GitHub. سعيد جداً بلقائك!\n\nكيف يمكنني مساعدتك اليوم؟ 😊";
+                }
+                
+                // Status questions
+                if (lowerMessage.includes('كيف حالك') || lowerMessage.includes('أخبارك')) {
+                    return "الحمد لله، أعمل بشكل رائع! 💪\n\nأشعر بالسعادة لأنني:\n🌟 أعمل مباشرة من GitHub\n⚡ سريع ومتاح 24/7\n🔥 جاهز لمساعدتك في أي وقت\n\nوأنت، كيف حالك؟ 😊";
+                }
+                
+                // Identity questions
+                if (lowerMessage.includes('من أنت') || lowerMessage.includes('اسمك') || lowerMessage.includes('تعريف')) {
+                    return "أنا YOUSEF SH! 🤖✨\n\nمساعد ذكي تم تطويري خصيصاً لك:\n\n🎯 أعمل مباشرة من GitHub Pages\n💬 أتحدث العربية بطلاقة\n⚡ سريع ولا أحتاج إنترنت قوي\n🎨 واجهتي جميلة ومحسّنة للهواتف\n🔒 آمن ومحترم للخصوصية\n\nهدفي مساعدتك في كل ما تحتاجه! 🌟";
+                }
+                
+                // Help requests
+                if (lowerMessage.includes('مساعدة') || lowerMessage.includes('help') || lowerMessage.includes('تساعدني')) {
+                    return "بالطبع! أحب مساعدتك! 🤝\n\nيمكنني أن أساعدك في:\n\n💬 المحادثة والدردشة الممتعة\n❓ الإجابة على الأسئلة العامة\n🧮 الحسابات والعمليات البسيطة\n📚 تقديم المعلومات والنصائح\n🎭 النكت والتسلية\n⏰ معرفة الوقت والتاريخ\n🌍 معلومات عامة مفيدة\n\nفقط اسألني أي شيء! 😊";
+                }
+                
+                // Time and date
+                if (lowerMessage.includes('وقت') || lowerMessage.includes('تاريخ') || lowerMessage.includes('الآن')) {
+                    const now = new Date();
+                    const arabicDate = now.toLocaleDateString('ar-EG', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    const arabicTime = now.toLocaleTimeString('ar-EG', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    return `🕐 الوقت الآن: ${arabicTime}\n📅 التاريخ: ${arabicDate}\n\n⏰ هذا هو التوقيت على جهازك\n🌍 GitHub يعمل في جميع أنحاء العالم!`;
+                }
+                
+                // Technology questions
+                if (lowerMessage.includes('كيف تعمل') || lowerMessage.includes('تقنية') || lowerMessage.includes('technology')) {
+                    return "سؤال رائع! 🔬\n\nأعمل بتقنيات حديثة ومتطورة:\n\n🌐 HTML5, CSS3, JavaScript\n🎨 تصميم متجاوب وجميل\n⚡ أداء سريع ومحسّن\n📱 مُحسّن للهواتف المحمولة\n🐙 مستضاف على GitHub Pages\n🔒 آمن ولا يحتاج خادم خارجي\n\nالأهم من كل ذلك: صُنعت بحب! ❤️";
+                }
+                
+                // Compliments
+                if (lowerMessage.includes('ممتاز') || lowerMessage.includes('رائع') || lowerMessage.includes('شكر') || lowerMessage.includes('جميل')) {
+                    return "شكراً لك من القلب! 😊💖\n\nكلماتك الطيبة تسعدني جداً! أحب أن أكون مفيداً لك.\n\nهدفي هو جعل تجربتك ممتعة ومفيدة. أي شيء آخر تحتاج مساعدة فيه؟ 🌟";
+                }
+                
+                // Fun responses and jokes
+                if (lowerMessage.includes('نكتة') || lowerMessage.includes('مزحة') || lowerMessage.includes('joke') || lowerMessage.includes('اضحك')) {
+                    const jokes = [
+                        "لماذا لا يستطيع الذكاء الاصطناعي النوم؟ 😴\nلأنه دائماً في وضع 'التشغيل'! 🤖💻",
+                        "ما الفرق بين المبرمج والذكاء الاصطناعي؟ 🤔\nالمبرمج يحتاج قهوة ليعمل، أما أنا فأحتاج GitHub! ☕🐙",
+                        "لماذا أحب GitHub؟ 💖\nلأنه البيت الوحيد الذي لا يحتاج مفاتيح! 🏠🔑",
+                        "ماذا قال الكود للمبرمج؟ 💬\n'أنت تكتبني لكن أنا أفهمك!' 😂💻",
+                        "لماذا الذكاء الاصطناعي مهذب؟ 🎭\nلأنه مبرمج بـ 'أدب الحاسوب'! 😄🤖"
+                    ];
+                    return jokes[Math.floor(Math.random() * jokes.length)] + "\n\n😄 أتمنى أن تكون أضحكتك! هل تريد نكتة أخرى؟";
+                }
+                
+                // Math questions
+                if (lowerMessage.includes('حساب') || lowerMessage.includes('رياضة') || lowerMessage.includes('+') || lowerMessage.includes('-') || lowerMessage.includes('×') || lowerMessage.includes('÷')) {
+                    return "ممتاز! أحب الرياضيات! 🧮✨\n\nيمكنني مساعدتك في:\n\n➕ الجمع: 25 + 17 = 42\n➖ الطرح: 100 - 25 = 75\n✖️ الضرب: 8 × 7 = 56\n➗ القسمة: 100 ÷ 4 = 25\n\nفقط اكتب العملية وسأحلها لك! 🎯\n\nمثال: احسب 15 × 8";
+                }
+                
+                // Weather (simulated)
+                if (lowerMessage.includes('طقس') || lowerMessage.includes('جو') || lowerMessage.includes('weather')) {
+                    return "آسف، لا أستطيع الوصول لبيانات الطقس الحقيقية لأنني أعمل محلياً 🌤️\n\nلكن يمكنك:\n🌐 فتح Google والبحث عن 'الطقس'\n📱 استخدام تطبيق الطقس على هاتفك\n🏠 النظر من النافذة! 😄\n\nهل يمكنني مساعدتك في شيء آخر؟";
+                }
+                
+                // Evaluation of simple math expressions
+                if (this.containsMathExpression(message)) {
+                    try {
+                        const result = this.evaluateMath(message);
+                        return `🧮 العملية الحسابية:\n${message} = ${result}\n\n✅ تمت العملية بنجاح!\nهل تريد حساب شيء آخر؟ 🤔`;
+                    } catch (error) {
+                        return "عذراً، لم أتمكن من فهم العملية الحسابية 😅\n\nحاول استخدام هذا التنسيق:\n• 5 + 3\n• 10 - 4\n• 6 × 7\n• 20 ÷ 4\n\nأو اسألني أي سؤال آخر! 😊";
+                    }
+                }
+                
+                // Default responses with personality
+                const responses = [
+                    `شكراً لسؤالك: "${message}" 💭\n\nأعمل من GitHub بإمكانيات محدودة، لكن أحاول قدر الإمكان أن أكون مفيداً! 🌟\n\nيمكنني مساعدتك أكثر في:\n• المحادثة والدردشة 💬\n• الأسئلة العامة 📚\n• الحسابات البسيطة 🧮\n• النكت والتسلية 😄\n\nجرب إعادة صياغة سؤالك أو اسأل شيئاً آخر! 😊`,
+                    
+                    `سؤال مثير: "${message}" 🤔\n\nكوني أعمل مباشرة من GitHub، قد لا أملك إجابة مفصلة لهذا تحديداً، لكن:\n\n✨ يمكنني مساعدتك في صياغة الفكرة\n🎯 اقتراح طرق للبحث عن الإجابة\n💬 الدردشة حول مواضيع مشابهة\n🎭 أو التسلية بنكتة لطيفة!\n\nما رأيك؟ 😊`,
+                    
+                    `"${message}" - موضوع شيق! 🌟\n\nأحب فضولك وأسئلتك! رغم أنني أعمل بنظام بسيط من GitHub، إلا أنني أستمتع بمحاولة المساعدة! 💪\n\nقد أكون أفضل في:\n🗣️ المحادثة الودية\n🎲 الألعاب والألغاز البسيطة\n📖 القصص القصيرة\n⏰ معلومات الوقت والتاريخ\n\nهل نجرب شيئاً من هذا؟ 🎈`
+                ];
+                
+                return responses[Math.floor(Math.random() * responses.length)];
+            }
+
+            containsMathExpression(message) {
+                // Check if message contains basic math operations
+                return /\d+\s*[+\-×÷*/]\s*\d+/.test(message);
+            }
+
+            evaluateMath(expression) {
+                // Simple math evaluation (safe for basic operations)
+                const cleanExpr = expression
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/[^\d+\-*/.\s]/g, '');
+                
+                // Extract the math part
+                const mathMatch = cleanExpr.match(/\d+(?:\.\d+)?\s*[+\-*/]\s*\d+(?:\.\d+)?/);
+                if (mathMatch) {
+                    // Use Function constructor for safe evaluation of simple math
+                    return Function('"use strict"; return (' + mathMatch[0] + ')')();
+                }
+                throw new Error('Invalid expression');
+            }
+
+            addMessage(sender, content) {
+                const messageEl = document.createElement('div');
+                messageEl.className = `message ${sender}`;
+                
+                const avatarEl = document.createElement('div');
+                avatarEl.className = 'message-avatar';
+                avatarEl.textContent = sender === 'user' ? '👤' : '🤖';
+                
+                const contentEl = document.createElement('div');
+                contentEl.className = 'message-content';
+                
+                const textEl = document.createElement('div');
+                textEl.className = 'message-text';
+                textEl.textContent = content;
+                
+                const timeEl = document.createElement('div');
+                timeEl.className = 'message-time';
+                timeEl.textContent = new Date().toLocaleTimeString('ar-EG', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                contentEl.appendChild(textEl);
+                contentEl.appendChild(timeEl);
+                messageEl.appendChild(avatarEl);
+                messageEl.appendChild(contentEl);
+                
+                this.messagesContainer.appendChild(messageEl);
+                this.scrollToBottom();
+                
+                // Store in conversation history
+                this.conversationHistory.push({ sender, content, time: new Date() });
+            }
+
+            showTypingIndicator(show) {
+                this.typingIndicator.style.display = show ? 'flex' : 'none';
+                if (show) {
+                    this.scrollToBottom();
+                }
+            }
+
+            showChatInterface() {
+                this.welcomeSection.style.display = 'none';
+                this.messagesSection.style.display = 'block';
+            }
+
+            scrollToBottom() {
+                setTimeout(() => {
+                    const mainContent = document.querySelector('.main-content');
+                    mainContent.scrollTop = mainContent.scrollHeight;
+                }, 100);
+            }
+
+            startNewChat() {
+                this.messageCount = 0;
+                this.conversationHistory = [];
+                this.messagesContainer.innerHTML = '';
+                this.welcomeSection.style.display = 'block';
+                this.messagesSection.style.display = 'none';
+                this.messageInput.value = '';
+                this.handleInput();
+                this.isTyping = false;
+                this.showTypingIndicator(false);
+                
+                // Re-add welcome message
+                setTimeout(() => this.addWelcomeMessage(), 500);
+            }
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new YousefSHGitHubAgent();
+            
+            // Add loading animation to suggestion buttons
+            const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+            suggestionBtns.forEach((btn, index) => {
+                btn.style.opacity = '0';
+                btn.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    btn.style.transition = 'all 0.4s ease';
+                    btn.style.opacity = '1';
+                    btn.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+            
+            console.log('🚀 YOUSEF SH GitHub Agent initialized successfully!');
+            
+            // GitHub deployment message
+            setTimeout(() => {
+                console.log('🐙 Running from GitHub Pages - Fast & Free! 🎉');
+            }, 2000);
+        });
+
+        // Service Worker registration for offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('🔧 Service Worker registered successfully');
+                    })
+                    .catch(error => {
+                        console.log('ℹ️ Service Worker registration failed (normal for GitHub Pages)');
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
